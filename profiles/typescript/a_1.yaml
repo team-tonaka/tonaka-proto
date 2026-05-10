@@ -1,2 +1,15 @@
-# TypeScript profile a_1
-# buf.build/bufbuild/es: v2.11.0 (protobuf-es v2)
+# https://docs.buf.build/configuration/v2/buf-gen-yaml
+# TypeScript code generation profile a_1.
+# Usage: buf generate --template profiles/typescript/a_1.yaml
+#
+# Runtime requirements:
+#   @bufbuild/protobuf  >= 2.x   (protobuf-es v2)
+#   @connectrpc/connect >= 1.x
+version: v2
+plugins:
+  - remote: buf.build/bufbuild/es:v2.11.0 # renovate: datasource=github-releases depName=bufbuild/protobuf-es
+    out: gen/typescript
+    opt: target=ts,import_extension=none
+  - remote: buf.build/connectrpc/es:v1.0.0 # renovate: datasource=github-releases depName=connectrpc/connect-es
+    out: gen/typescript
+    opt: target=ts,import_extension=none

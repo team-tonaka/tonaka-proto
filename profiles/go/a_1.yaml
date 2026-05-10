@@ -1,4 +1,23 @@
-# Go profile a_1
-# buf.build/protocolbuffers/go: v1.36.11
-# buf.build/grpc/go:             v1.6.1
-# buf.build/connectrpc/go:       v1.19.1
+# https://docs.buf.build/configuration/v2/buf-gen-yaml
+# Go code generation profile a_1.
+# Usage: buf generate --template profiles/go/a_1.yaml
+#
+# Note: managed mode is intentionally omitted.
+# Each .proto file declares `option go_package` explicitly with a package alias
+# (e.g. ";portfolio_service_v1"). Enabling managed.go_package_prefix would
+# override those options and drop the alias, changing generated package names
+# from `portfolio_service_v1` to `v1`.
+version: v2
+plugins:
+  - remote: buf.build/protocolbuffers/go:v1.36.11 # renovate: datasource=github-releases depName=protocolbuffers/protobuf-go
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - remote: buf.build/grpc/go:v1.6.1 # renovate: datasource=github-releases depName=grpc/grpc-go prefix=cmd/protoc-gen-go-grpc/
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - remote: buf.build/connectrpc/go:v1.19.1 # renovate: datasource=github-releases depName=connectrpc/connect-go
+    out: gen/go
+    opt:
+      - paths=source_relative
