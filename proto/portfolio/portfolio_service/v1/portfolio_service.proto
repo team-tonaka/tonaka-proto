@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package portfolio.portfolio_service.v1;
+
+option go_package = "github.com/team-tonaka/tonaka-proto/gen/go/portfolio/portfolio_service/v1;portfolio_service_v1";
+
+// ── Messages ──────────────────────────────────────────────
+
+message Profile {
+  string username = 1;
+  string title = 2;
+  string bio = 3;
+  string image = 4;
+  string url = 5;
+  int32 career_start_year = 6;
+}
+
+message Project {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  repeated string tags = 4;
+  string url = 5;
+  string github = 6;
+  string image = 7;
+}
+
+message Skill {
+  string skill = 1;
+  string category = 2;
+}
+
+message Experience {
+  string period = 1;
+  string title = 2;
+  string location = 3;
+  repeated string description = 4;
+  repeated string tags = 5;
+  string icon = 6;
+}
+
+// ── Requests / Responses ──────────────────────────────────
+
+message GetProfileRequest {}
+
+message GetProfileResponse {
+  Profile profile = 1;
+}
+
+message ListProjectsRequest {}
+
+message ListProjectsResponse {
+  repeated Project projects = 1;
+}
+
+message ListExperiencesRequest {}
+
+message ListExperiencesResponse {
+  repeated Experience experiences = 1;
+}
+
+message ListSkillsRequest {}
+
+message ListSkillsResponse {
+  repeated Skill skills = 1;
+}
+
+// ── Service ───────────────────────────────────────────────
+
+service PortfolioService {
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+  rpc ListProjects(ListProjectsRequest) returns (ListProjectsResponse);
+  rpc ListExperiences(ListExperiencesRequest) returns (ListExperiencesResponse);
+  rpc ListSkills(ListSkillsRequest) returns (ListSkillsResponse);
+}

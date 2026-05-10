@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: bufbuild/buf-setup-action@v1
+
+      - name: Lint
+        run: buf lint
+
+      - name: Format check
+        run: buf format --diff --exit-code
+
+      - name: Breaking change detection
+        if: github.event_name == 'pull_request'
+        run: buf breaking --against 'https://github.com/${{ github.repository }}.git#branch=main'
+
+      - name: Generate
+        run: buf generate
+
+      - name: Commit generated code
+        if: github.ref == 'refs/heads/main'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: regenerate proto code [skip ci]"
+          file_pattern: "gen/**"

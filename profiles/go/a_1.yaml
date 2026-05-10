@@ -1,0 +1,4 @@
+# Go profile a_1
+# buf.build/protocolbuffers/go: v1.36.11
+# buf.build/grpc/go:             v1.6.1
+# buf.build/connectrpc/go:       v1.19.1
