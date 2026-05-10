@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package system_admin.system_admin_service.v1;
+
+option go_package = "github.com/team-tonaka/tonaka-proto/gen/go/system_admin/system_admin_service/v1;system_admin_service_v1";
+
+// ── Shared types ──────────────────────────────────────────
+
+message Profile {
+  string username         = 1;
+  string title            = 2;
+  string bio              = 3;
+  string image            = 4;
+  string url              = 5;
+  int32  career_start_year = 6;
+}
+
+message Project {
+  string          id          = 1;
+  string          title       = 2;
+  string          description = 3;
+  repeated string tags        = 4;
+  string          url         = 5;
+  string          github      = 6;
+  string          image       = 7;
+  int32           sort_order  = 8;
+}
+
+message Experience {
+  string          id          = 1;
+  string          period      = 2;
+  string          title       = 3;
+  string          location    = 4;
+  repeated string description = 5;
+  repeated string tags        = 6;
+  string          icon        = 7;
+  int32           sort_order  = 8;
+}
+
+message Skill {
+  string id         = 1;
+  string skill      = 2;
+  string category   = 3;
+  int32  sort_order = 4;
+}
+
+// ── Profile ───────────────────────────────────────────────
+
+message GetProfileRequest {}
+message GetProfileResponse { Profile profile = 1; }
+
+message UpdateProfileRequest { Profile profile = 1; }
+message UpdateProfileResponse { Profile profile = 1; }
+
+// ── Projects ──────────────────────────────────────────────
+
+message ListProjectsRequest {}
+message ListProjectsResponse { repeated Project projects = 1; }
+
+message CreateProjectRequest {
+  string          title       = 1;
+  string          description = 2;
+  repeated string tags        = 3;
+  string          url         = 4;
+  string          github      = 5;
+  string          image       = 6;
+  int32           sort_order  = 7;
+}
+message CreateProjectResponse { Project project = 1; }
+
+message UpdateProjectRequest { Project project = 1; }
+message UpdateProjectResponse { Project project = 1; }
+
+message DeleteProjectRequest { string id = 1; }
+message DeleteProjectResponse {}
+
+// ── Experiences ───────────────────────────────────────────
+
+message ListExperiencesRequest {}
+message ListExperiencesResponse { repeated Experience experiences = 1; }
+
+message CreateExperienceRequest {
+  string          period      = 1;
+  string          title       = 2;
+  string          location    = 3;
+  repeated string description = 4;
+  repeated string tags        = 5;
+  string          icon        = 6;
+  int32           sort_order  = 7;
+}
+message CreateExperienceResponse { Experience experience = 1; }
+
+message UpdateExperienceRequest { Experience experience = 1; }
+message UpdateExperienceResponse { Experience experience = 1; }
+
+message DeleteExperienceRequest { string id = 1; }
+message DeleteExperienceResponse {}
+
+// ── Skills ────────────────────────────────────────────────
+
+message ListSkillsRequest {}
+message ListSkillsResponse { repeated Skill skills = 1; }
+
+message CreateSkillRequest {
+  string skill      = 1;
+  string category   = 2;
+  int32  sort_order = 3;
+}
+message CreateSkillResponse { Skill skill = 1; }
+
+message UpdateSkillRequest { Skill skill = 1; }
+message UpdateSkillResponse { Skill skill = 1; }
+
+message DeleteSkillRequest { string id = 1; }
+message DeleteSkillResponse {}
+
+// ── Service ───────────────────────────────────────────────
+
+service SystemAdminService {
+  // Profile
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse);
+
+  // Projects
+  rpc ListProjects(ListProjectsRequest)     returns (ListProjectsResponse);
+  rpc CreateProject(CreateProjectRequest)   returns (CreateProjectResponse);
+  rpc UpdateProject(UpdateProjectRequest)   returns (UpdateProjectResponse);
+  rpc DeleteProject(DeleteProjectRequest)   returns (DeleteProjectResponse);
+
+  // Experiences
+  rpc ListExperiences(ListExperiencesRequest)     returns (ListExperiencesResponse);
+  rpc CreateExperience(CreateExperienceRequest)   returns (CreateExperienceResponse);
+  rpc UpdateExperience(UpdateExperienceRequest)   returns (UpdateExperienceResponse);
+  rpc DeleteExperience(DeleteExperienceRequest)   returns (DeleteExperienceResponse);
+
+  // Skills
+  rpc ListSkills(ListSkillsRequest)   returns (ListSkillsResponse);
+  rpc CreateSkill(CreateSkillRequest) returns (CreateSkillResponse);
+  rpc UpdateSkill(UpdateSkillRequest) returns (UpdateSkillResponse);
+  rpc DeleteSkill(DeleteSkillRequest) returns (DeleteSkillResponse);
+}
