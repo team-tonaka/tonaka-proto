@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package tc.system_admin.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+
+// システムアドミンユーザー
+message SystemAdminUser {
+  // システムアドミンユーザーID
+  string system_admin_user_id = 1 [(buf.validate.field).string.uuid = true];
+  // ユーザ名
+  string name = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 60
+  }];
+  // メールアドレス
+  string email = 3 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 254
+  }];
+  // 権限
+  SystemAdminUserType system_admin_user_type = 4;
+  // システムアドミンユーザーのステータス
+  SystemAdminUserStatus system_admin_user_status = 5;
+  // 作成したシステムアドミンユーザーの名前
+  string creator_name = 6 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 60
+  }];
+  // 作成日時
+  google.protobuf.Timestamp create_time = 7;
+  // 最終更新したシステムアドミンユーザーの名前
+  string updater_name = 8 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 60
+  }];
+  // 更新日時
+  google.protobuf.Timestamp update_time = 9;
+}
+
+// ロール名
+enum SystemAdminUserType {
+  // 不特定
+  SYSTEM_ADMIN_USER_TYPE_UNSPECIFIED = 0;
+  // リーダー
+  SYSTEM_ADMIN_USER_TYPE_ADMIN = 1;
+}
+
+// システムアドミンのユーザーステータス
+enum SystemAdminUserStatus {
+  // 不特定
+  SYSTEM_ADMIN_USER_STATUS_UNSPECIFIED = 0;
+  // 招待中
+  SYSTEM_ADMIN_USER_STATUS_INVITED = 1;
+  // 有効
+  SYSTEM_ADMIN_USER_STATUS_ENABLED = 2;
+  // 無効
+  SYSTEM_ADMIN_USER_STATUS_DISABLED = 3;
+}

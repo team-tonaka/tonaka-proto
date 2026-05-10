@@ -1,0 +1,9 @@
+# https://docs.buf.build/configuration/v2/buf-gen-yaml
+version: v2
+managed:
+  enabled: true
+plugins:
+  - remote: buf.build/bufbuild/es:v2.11.0 # renovate: datasource=github-releases depName=bufbuild/protobuf-es
+    out: gen/typescript
+    opt: target=ts,import_extension=none
+    include_imports: true

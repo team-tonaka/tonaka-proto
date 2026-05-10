@@ -1,9 +1,20 @@
+# https://buf.build/docs/configuration/v2/buf-yaml
 version: v2
 modules:
   - path: proto
-lint:
-  use:
-    - STANDARD
+    name: team-tonaka.buf.dev/team-tonaka/tonaka-proto
 breaking:
   use:
     - FILE
+  ignore_unstable_packages: true
+lint:
+  use:
+    - STANDARD
+  ignore:
+    # 認可用Interceptorのテストでのみ使うprotoなので、意図してlint除外する。
+    - loc/extension/authorization/v1/example_authorization_import.proto
+    - loc/extension/authorization/v1/example_authorization_not_imported.proto
+deps:
+  - buf.build/bufbuild/protovalidate:v1.2.0 # renovate: datasource=github-releases depName=bufbuild/protovalidate
+  - buf.build/googleapis/googleapis:05cca56fb2037c01576e2d2fdcf00e46eb86c777 # renovate: git-ref org=googleapis repo=googleapis ref=master
+  - buf.build/protocolbuffers/wellknowntypes:v31.1 # renovate: datasource=github-releases depName=protocolbuffers/protobuf versioning=semver-coerced

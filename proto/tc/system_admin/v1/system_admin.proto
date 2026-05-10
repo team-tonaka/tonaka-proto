@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package tc.system_admin.v1;
+
+import "buf/validate/validate.proto";
+import "tc/system_admin/v1/system_admin_user.proto";
+
+
+// SystemAdminServiceはSystemAdminオブジェクトに対する操作を提供する。
+service SystemAdminService {
+  // * ログイン
+  // ログイン API
+  rpc LoginSystemAdmin(LoginSystemAdminRequest) returns (LoginSystemAdminResponse);
+  // ログアウト API
+  rpc LogoutSystemAdmin(LogoutSystemAdminRequest) returns (LogoutSystemAdminResponse);
+  // システムアドミンユーザーパスワード更新トークンチェック API
+  rpc CheckTokenUpdatePassword(CheckTokenUpdatePasswordRequest) returns (CheckTokenUpdatePasswordResponse);
+  // システムアドミンユーザパスワードリセット API
+  rpc ResetPasswordForSystemAdminUser(ResetPasswordForSystemAdminUserRequest) returns (ResetPasswordForSystemAdminUserResponse);
+  // システムアドミンユーザパスワードリセットメール送信 API
+  rpc SendPasswordResetEmailForSystemAdminUser(SendPasswordResetEmailForSystemAdminUserRequest) returns (SendPasswordResetEmailForSystemAdminUserResponse);
+
+}
+
+// LoginSystemAdminRequest
+message LoginSystemAdminRequest {
+  // メールアドレス
+  string email = 1 [(buf.validate.field).string = {
+    email: true
+    max_len: 254
+  }];
+  // パスワード
+  string password = 2 [(buf.validate.field).string = {
+    min_len: 8
+    // lintエラーを回避するためコメントアウト。
+    // pattern: "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\W])(?!.*\\s).{8,}$"
+  }];
+}
+
+// LoginSystemAdminResponse
+//
+// #### ERRORS
+// - UNAUTHENTICATED:
+//    - Authentication failed
+message LoginSystemAdminResponse {
+  // jwtのアクセストークン
+  string access_token = 1;
+}
+
+// LogoutSystemAdminRequest
+message LogoutSystemAdminRequest {}
+
+// LogoutSystemAdminResponse
+message LogoutSystemAdminResponse {}
+
+// システムアドミンユーザーのパスワード更新トークン確認リクエスト
+message CheckTokenUpdatePasswordRequest {
+  // トークン
+  string token = 1;
+}
+
+// システムアドミンユーザーのパスワード更新トークン確認レスポンス
+//
+// #### ERRORS
+// - Unauthenticated
+//   - `token`がシステムに存在しない
+//   - `token`期限切れ
+message CheckTokenUpdatePasswordResponse {}
+
+// システムアドミンユーザーのパスワードリセットリクエスト
+message ResetPasswordForSystemAdminUserRequest {
+  // 新しいパスワード
+  string password = 1 [(buf.validate.field).string = {
+    min_len: 8
+    // lintエラーを回避するためコメントアウト。
+    // pattern: "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\W])(?!.*\\s).{8,}$"
+  }];
+  // 新しいパスワード(再入力)
+  string re_password = 2 [(buf.validate.field).string = {
+    min_len: 8
+    // lintエラーを回避するためコメントアウト。
+    // pattern: "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\W])(?!.*\\s).{8,}$"
+  }];
+  // パスワードリセットのトークン
+  string token_reset_password = 3;
+}
+
+// システムアドミンユーザーのパスワードリセットレスポンス
+//
+// #### ERRORS
+// - InvalidArgument:
+//    - password invalid
+//    - re-password invalid
+// - UNAUTHENTICATED:
+//    - Token Invalid
+// - UNAVAILABLE
+//    - Failed to update password of System Admin User on Firebase Authentication
+message ResetPasswordForSystemAdminUserResponse {}
+
+// システムアドミンユーザーパスワードリセットメール送信のリクエスト
+message SendPasswordResetEmailForSystemAdminUserRequest {
+  // メールアドレス
+  string email = 1;
+}
+
+// システムアドミンユーザーパスワードリセットメール送信のレスポンス
+//
+// #### ERRORS
+// - Not Found:
+//    - Email Not Found
+message SendPasswordResetEmailForSystemAdminUserResponse {}
+
